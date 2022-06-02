@@ -1,0 +1,19 @@
+from logging import root
+import xml.etree.cElementTree as ET
+
+# У меня файл находился в этой дериктории C:\Users\HP\Desktop\Tests\
+hotels = ET.parse(r'C:\Users\HP\Desktop\Tests\Hotels.xml')
+hotels = hotels.getroot()
+
+root = ET.Element('lists')
+do = ET.SubElement(root, 'Hotels')
+
+for hotel in hotels.iter('Hotel'):
+    if 'Hilton' in hotel[0].text:
+        if 'ny' in hotel[1][0].text.lower() or 'new york' in hotel[1][0].text.lower():
+            doc = ET.SubElement(do, 'Hotel')
+            ET.SubElement(doc, 'Name').text = hotel[0].text
+            ET.SubElement(doc, 'Price').text = hotel.attrib.get('Price')
+            ET.SubElement(doc, 'Adress').text = hotel[1][0].text
+tree = ET.ElementTree(root)
+tree.write('H.xml')
